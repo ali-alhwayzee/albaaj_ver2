@@ -1,0 +1,7 @@
+        <Route path="/vehicles/new" element={<PrivateRoute><VehicleForm /></PrivateRoute>} />
+        <Route path="/vehicles/new" element={<PrivateRoute><VehicleForm /></PrivateRoute>} />
+        //<Route path="/" element={<Navigate to="/login" replace />} />
+        <Route path="*" element={<Navigate to="/login" replace />} />
+      <Route path="/vehicles/edit/:id" element={<PrivateRoute><VehicleForm /></PrivateRoute>} />
+
+app.tsx
