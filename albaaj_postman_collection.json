@@ -1,0 +1,91 @@
+{
+  "info": {
+    "name": "Albaaj Vehicle API",
+    "_postman_id": "a1b2c3d4-e5f6-7890-abcd-1234567890ef",
+    "description": "Collection to test Albaaj Vehicle Management API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Login",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\"username\": \"admin\", \"password\": \"admin\"}"
+        },
+        "url": {
+          "raw": "http://localhost:8000/token",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8000",
+          "path": [
+            "token"
+          ]
+        }
+      }
+    },
+    {
+      "name": "Get All Vehicles",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer <your_token_here>"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:8000/vehicles/",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8000",
+          "path": [
+            "vehicles"
+          ]
+        }
+      }
+    },
+    {
+      "name": "Create Vehicle",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer <your_token_here>"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\"plate_number\": \"ABC123\", \"owner\": \"Ibrahim\", \"amount\": 5000, \"paid_amount\": 2000}"
+        },
+        "url": {
+          "raw": "http://localhost:8000/vehicles/",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8000",
+          "path": [
+            "vehicles"
+          ]
+        }
+      }
+    }
+  ]
+}

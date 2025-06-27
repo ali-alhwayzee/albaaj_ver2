@@ -1,0 +1,50 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:15-alpine
+    container_name: albaaj_postgres_db
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-albaajuser}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-albaajpassword}
+      POSTGRES_DB: ${POSTGRES_DB:-albaajdb}
+    ports:
+      - "5432:5432"
+    networks:
+      - albaaj_network
+    restart: unless-stopped
+
+  backend:
+    container_name: albaaj_backend
+    build:
+      context: ./backend-app
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+    environment:
+      DATABASE_URL: postgresql://${POSTGRES_USER:-albaajuser}:${POSTGRES_PASSWORD:-albaajpassword}@db:5432/${POSTGRES_DB:-albaajdb}
+    depends_on:
+      - db
+    networks:
+      - albaaj_network
+    restart: unless-stopped
+
+  # ✅ تم حذف/تعطيل frontend nginx لتجنب تعارض المنفذ
+  # frontend:
+  #   container_name: albaaj_frontend
+  #   build:
+  #     context: ./frontend-app
+  #     dockerfile: Dockerfile
+  #   ports:
+  #     - "5173:80"
+  #   environment:
+  #     - VITE_API_URL=http://albaaj_backend:8000
+  #   depends_on:
+  #     - backend
+  #   networks:
+  #     - albaaj_network
+  #   restart: unless-stopped
+
+networks:
+  albaaj_network:
+    driver: bridge

@@ -1,0 +1,35 @@
+version: '3.8'
+
+services:
+  frontend:
+    container_name: albaaj_frontend_dev
+    build:
+      context: ./frontend-app
+      dockerfile: Dockerfile.dev  # ✅ يستخدم Dockerfile خاص بالتطوير
+    working_dir: /app
+    command: npm run dev -- --host
+    volumes:
+      - ./frontend-app:/app
+      - /app/node_modules
+    ports:
+      - "5173:5173"
+    environment:
+      ##- VITE_API_URL=http://albaaj_backend:8000
+      - VITE_API_URL=http://localhost:8000
+
+    depends_on:
+      - backend
+    networks:
+      - albaaj_network
+
+  backend:
+    volumes:
+      - ./backend-app/src:/app/src
+    command: >
+      bash -c "uvicorn src.main:app --host 0.0.0.0 --port 8000 --reload"
+    environment:
+      - DATABASE_URL=postgresql://albaajuser:albaajpassword@db:5432/albaajdb
+    depends_on:
+      - db
+    networks:
+      - albaaj_network
