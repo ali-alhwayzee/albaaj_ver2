@@ -4,6 +4,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { FaUser, FaLock } from "react-icons/fa";
 import { login } from "@/services/authService";
+import { useAuth } from "@/contexts/AuthContext";
 
 interface LoginFormInputs {
   username: string;
@@ -17,6 +18,7 @@ interface LoginCardProps {
 export default function LoginCard({ redirectTo }: LoginCardProps) {
   const navigate = useNavigate();
   const location = useLocation();
+  const { login: setAuth } = useAuth();
 
   const getRedirectPath = () => {
     const fromState = (location.state as any)?.from?.pathname;
@@ -35,16 +37,16 @@ export default function LoginCard({ redirectTo }: LoginCardProps) {
     try {
       const result = await login(data.username, data.password);
   
-      localStorage.removeItem("token");
-      localStorage.removeItem("username");
+      
   
-      localStorage.setItem("token", result.access_token);
-      localStorage.setItem("username", data.username);
-  
+
+      setAuth(result.access_token, data.username);
+
       console.log("✅ تم تسجيل الدخول بنجاح");
   
+
       const redirectPath = redirectTo || getRedirectPath();
-      navigate(redirectPath, { replace: true }); // ✅ التعديل هنا
+      navigate(redirectPath, { replace: true });
     } catch (error: any) {
       console.error("❌ خطأ في تسجيل الدخول:", error);
       alert(error.message || "حدث خطأ أثناء تسجيل الدخول");
@@ -76,6 +78,7 @@ export default function LoginCard({ redirectTo }: LoginCardProps) {
             </span>
             <input
               type="text"
+              autoComplete="username"
               placeholder="أدخل اسم المستخدم"
               {...register("username", { required: "اسم المستخدم مطلوب" })}
               className="w-full bg-gray-100 text-gray-800 border border-gray-300 pr-10 pl-3 py-2 rounded-md placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-cyan-500"

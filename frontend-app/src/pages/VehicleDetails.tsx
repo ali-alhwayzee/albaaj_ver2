@@ -3,9 +3,10 @@ import { useParams, useNavigate } from 'react-router-dom';
 import DashboardLayout from '../components/layout/DashboardLayout';
 import GlassCard from '../components/ui/GlassCard';
 import GlassButton from '../components/ui/GlassButton';
-import colors from '../lib/colors';
 import VehicleService from '../services/VehicleService';
+import theme from '../lib/colors';
 
+const { colors } = theme;
 const VehicleDetails: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();

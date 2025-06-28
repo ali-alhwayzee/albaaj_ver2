@@ -43,14 +43,15 @@ export default function RegisterCard() {
         <h2 className="text-2xl font-bold text-cyan-700 text-center mb-6">إنشاء حساب جديد</h2>
 
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-          <div>
-            <label className="block text-gray-700 mb-1">اسم المستخدم</label>
-            <input
-              type="text"
-              {...formRegister("username", { required: "اسم المستخدم مطلوب" })}
-              placeholder="أدخل اسم المستخدم"
-              className="w-full bg-gray-100 text-gray-800 border border-gray-300 px-4 py-2 rounded-md placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-cyan-500"
-            />
+        <div>
+        <label className="block text-gray-700 mb-1">اسم المستخدم</label>
+        <input
+        type="text"
+        autoComplete="username"
+        {...formRegister("username", { required: "اسم المستخدم مطلوب" })}
+          placeholder="أدخل اسم المستخدم"
+          className="w-full bg-gray-100 text-gray-800 border border-gray-300 px-4 py-2 rounded-md placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-cyan-500"
+          />
             {errors.username && (
               <p className="text-sm text-red-500 mt-1">{errors.username.message}</p>
             )}

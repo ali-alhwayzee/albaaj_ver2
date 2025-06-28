@@ -1,8 +1,9 @@
 import React from 'react';
 import styled from 'styled-components';
 import { navbarGlassmorphism, createGlassmorphismStyle } from '../../lib/glassmorphism';
-import colors from '../../lib/colors';
+import theme from '../../lib/colors';
 
+const { colors } = theme;
 interface GlassNavbarProps {
   title: string;
   logo?: React.ReactNode;

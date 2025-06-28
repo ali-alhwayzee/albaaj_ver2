@@ -6,6 +6,7 @@ interface AuthContextType {
   isAuthenticated: boolean;
   username: string | null;
   isLoading: boolean;
+  login: (token: string, username: string) => void;
   logout: () => void;
 }
 
@@ -13,6 +14,7 @@ const AuthContext = createContext<AuthContextType>({
   isAuthenticated: false,
   username: null,
   isLoading: true,
+  login: () => {},
   logout: () => {},
 });
 
@@ -20,6 +22,13 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [username, setUsername] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+
+  const login = (token: string, user: string) => {
+    localStorage.setItem("token", token);
+    localStorage.setItem("username", user);
+    setIsAuthenticated(true);
+    setUsername(user);
+  };
 
   const logout = () => {
     console.warn("🚪 Logout triggered");
@@ -70,7 +79,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   }, []);
 
   return (
-    <AuthContext.Provider value={{ isAuthenticated, username, isLoading, logout }}>
+    <AuthContext.Provider value={{ isAuthenticated, username, isLoading, login, logout }}>
       {children}
     </AuthContext.Provider>
   );

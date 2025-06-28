@@ -1,38 +1,49 @@
 // src/components/auth/PrivateRoute.tsx
 import React from "react";
 import { Navigate, useLocation } from "react-router-dom";
-import jwt_decode, { JwtPayload as DefaultJwtPayload } from "jwt-decode";
+import { jwtDecode, JwtPayload as DefaultJwtPayload } from "jwt-decode";
+import { useAuth } from "@/contexts/AuthContext";
 
 interface Props {
   children: React.ReactElement;
 }
 
-// يمكنك توسيع الـ Payload إن أردت إضافة حقول أخرى
 interface JwtPayload extends DefaultJwtPayload {
   [key: string]: any;
 }
 
-const isTokenValid = (token: string | null): boolean => {
-  if (!token) return false;
+const isTokenValid = (rawToken: string | null): boolean => {
+  if (!rawToken) return false;
   try {
-    const decoded = jwt_decode(token) as JwtPayload;
-    return decoded.exp * 1000 > Date.now(); // مقارنة تاريخ الانتهاء بالوقت الحالي
+    const token = rawToken.replace(/^['"]|['"]$/g, "").trim();
+    const decoded = jwtDecode<JwtPayload>(token);
+    const exp = typeof decoded.exp === "string" ? parseInt(decoded.exp, 10) : decoded.exp;
+    if (typeof exp !== "number" || Number.isNaN(exp)) return false;
+    return exp * 1000 > Date.now();
   } catch {
     return false;
   }
 };
 
 const PrivateRoute: React.FC<Props> = ({ children }) => {
-  const token = localStorage.getItem("token");
   const location = useLocation();
-  console.log("🔐 token from PrivateRoute:", token);
+  const { isAuthenticated, isLoading } = useAuth();
 
-  if (!isTokenValid(token)) {
-    console.warn("🔐 Invalid or expired token");
-    return <Navigate to="/login" state={{ from: location }} replace />;
+  if (isLoading) {
+    return null;
   }
 
-  return children;
+  if (isAuthenticated) {
+    return children;
+  }
+
+  const token = localStorage.getItem("token");
+
+  if (isTokenValid(token)) {
+    return children;
+  }
+
+  return <Navigate to="/login" state={{ from: location }} replace />;
 };
 
 export default PrivateRoute;

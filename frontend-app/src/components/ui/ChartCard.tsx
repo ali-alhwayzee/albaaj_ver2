@@ -2,8 +2,8 @@
 import React from 'react';
 import styled from 'styled-components';
 import { cardGlassmorphism, createGlassmorphismStyle } from '../../lib/glassmorphism';
-import colors from '../../lib/colors';
-
+import theme from '../../lib/colors';
+const { colors } = theme;
 interface ChartCardProps {
   title: string;
   children: React.ReactNode;

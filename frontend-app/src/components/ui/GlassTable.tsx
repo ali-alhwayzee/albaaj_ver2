@@ -1,8 +1,9 @@
 import React from 'react';
 import styled from 'styled-components';
 import { tableGlassmorphism, createGlassmorphismStyle } from '../../lib/glassmorphism';
-import colors from '../../lib/colors';
+import theme from '../../lib/colors';
 
+const { colors } = theme;
 interface GlassTableProps {
   columns: {
     header: string;
