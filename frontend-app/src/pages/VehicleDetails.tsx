@@ -7,6 +7,11 @@ import VehicleService from '../services/VehicleService';
 import theme from '../lib/colors';
 
 const { colors } = theme;
+const categoryLabels: Record<string, string> = {
+  private: 'خصوصي',
+  truck: 'حمل',
+  taxi: 'أجرة',
+};
 const VehicleDetails: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
@@ -91,8 +96,8 @@ const VehicleDetails: React.FC = () => {
   return (
       <DashboardLayout title="تفاصيل المركبة">
       <div className="mb-6">
-        <h1 className="text-3xl font-bold text-white">تفاصيل المركبة</h1>
-        <p className="text-white/70">عرض جميع بيانات المركبة</p>
+      <h1 className="text-3xl font-bold text-cyan-900">تفاصيل المركبة</h1>
+        <p className="text-gray-600">عرض جميع بيانات المركبة</p>
       </div>
 
       {loading ? (
@@ -113,7 +118,7 @@ const VehicleDetails: React.FC = () => {
                   {vehicle.vehicle_letter} {vehicle.vehicle_number} - {vehicle.province}
                 </h2>
                 <p className="text-white/70">
-                  {vehicle.category} | رقم الشاسي: {vehicle.chassis_number}
+                {categoryLabels[vehicle.category as string] || vehicle.category} | رقم الشاصي: {vehicle.chassis_number}
                 </p>
               </div>
               <div className="flex space-x-3 mt-4 md:mt-0">
@@ -138,8 +143,11 @@ const VehicleDetails: React.FC = () => {
                 <DetailItem label="رقم المركبة" value={vehicle.vehicle_number} />
                 <DetailItem label="حرف المركبة" value={vehicle.vehicle_letter} />
                 <DetailItem label="المحافظة" value={vehicle.province} />
-                <DetailItem label="الصنف" value={vehicle.category} />
-                <DetailItem label="رقم الشاسي" value={vehicle.chassis_number} />
+                <DetailItem
+                  label="الصنف"
+                  value={categoryLabels[vehicle.category as string] || vehicle.category}
+                />
+                <DetailItem label="رقم الشاصي" value={vehicle.chassis_number} />
                 <DetailItem label="موقع العمل" value={vehicle.work_location} />
               </div>
             </GlassCard>

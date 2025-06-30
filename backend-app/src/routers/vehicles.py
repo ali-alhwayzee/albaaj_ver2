@@ -27,7 +27,8 @@ def create_vehicle_endpoint(
 ):
     db_vehicle_by_chassis = crud.get_vehicle_by_chassis(db, chassis_number=vehicle.chassis_number)
     if db_vehicle_by_chassis:
-        raise HTTPException(status_code=400, detail="Chassis number already registered")
+        raise HTTPException(status_code=400, detail="رقم الشاصي مسجل مسبقا")
+    
     created_vehicle = crud.create_vehicle(db=db, vehicle=vehicle)
     created_vehicle.remaining_amount = calculate_remaining(created_vehicle)
     return created_vehicle
@@ -66,7 +67,7 @@ def update_vehicle_endpoint(
     if vehicle.chassis_number:
         existing_vehicle = crud.get_vehicle_by_chassis(db, chassis_number=vehicle.chassis_number)
         if existing_vehicle and existing_vehicle.id != vehicle_id:
-            raise HTTPException(status_code=400, detail="Chassis number already registered to another vehicle")
+            raise HTTPException(status_code=400, detail="رقم الشاصي مسجل لمركبة أخرى")
 
     db_vehicle = crud.update_vehicle(db, vehicle_id=vehicle_id, vehicle=vehicle)
     if db_vehicle is None:

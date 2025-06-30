@@ -4,7 +4,7 @@ import footerLogo from "@/assets/footer-logo.png"; // عدّل المسار حس
 
 const Footer: React.FC = () => {
   return (
-    <footer className="mt-12 text-center text-sm text-gray-700 font-[Tajawal]">
+    <footer className="mt-12 text-center text-sm text-gray-700 font-[Tajawal] print:hidden">
       <div className="flex justify-center mb-3">
         <img
           src={footerLogo}

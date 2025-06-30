@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import DashboardLayout from "../components/layout/DashboardLayout";
 import VehicleService from "../services/VehicleService";
 import { motion } from "framer-motion";
-import { FaCar, FaCheckCircle, FaMoneyBillWave } from "react-icons/fa";
+import { PlusCircle } from "lucide-react";
 import { Pie } from "react-chartjs-2";
 import { Chart, registerables } from "chart.js";
 import { useNavigate } from "react-router-dom";
@@ -96,10 +96,8 @@ const Dashboard: React.FC = () => {
               onClick={() => navigate("/vehicles/new")}
               className="inline-flex items-center justify-center gap-2 bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-2xl text-sm md:text-base shadow transition-all duration-300 w-full md:w-auto"
             >
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none"
-                viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" />
-              </svg>
+              <PlusCircle className="h-5 w-5" />
+
               <span className="font-[Tajawal]">إضافة مركبة</span>
             </button>
 

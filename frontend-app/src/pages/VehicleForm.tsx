@@ -8,7 +8,6 @@ import GlassInput from '../components/ui/GlassInput';
 import GlassSelect from '../components/ui/GlassSelect';
 import GlassButton from '../components/ui/GlassButton';
 import VehicleService from '../services/VehicleService';
-import Footer from '../components/ui/Footer'; // ✅ مكون الفوتر
 
 const VehicleForm: React.FC = () => {
   console.log("📌 Token inside VehicleForm:", localStorage.getItem("token"));
@@ -39,10 +38,37 @@ const VehicleForm: React.FC = () => {
 
   const [errors, setErrors] = useState<Record<string, string>>({});
 
-  const letterOptions = [...'أبجدهوزحطيكلمنسعصقرشتثخذضظغفق'].map(l => ({ value: l, label: l }));
-  const provinceOptions = ['بغداد', 'البصرة', 'نينوى', 'أربيل', 'النجف', 'كربلاء', 'الأنبار', 'ذي قار', 'ديالى', 'صلاح الدين', 'بابل', 'كركوك', 'واسط', 'ميسان', 'المثنى', 'دهوك', 'السليمانية', 'القادسية'].map(p => ({ value: p, label: p }));
-  const categoryOptions = ['خاص', 'عام', 'حكومي', 'تجاري', 'أجرة', 'حمل'].map(c => ({ value: c, label: c }));
-
+  const letterOptions = [
+    ...'أبجدهوزحطيكلمنسعصقرشتثخذضظغفق',
+    ...'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
+  ].map(l => ({ value: l, label: l }));
+  const provinceOptions = [
+    'بغداد',
+    'البصرة',
+    'نينوى',
+    'أربيل',
+    'النجف',
+    'كربلاء',
+    'الأنبار',
+    'ذي قار',
+    'ديالى',
+    'صلاح الدين',
+    'بابل',
+    'كركوك',
+    'واسط',
+    'ميسان',
+    'المثنى',
+    'دهوك',
+    'السليمانية',
+    'القادسية'
+  ].map(p => ({ value: p, label: p }));
+  const baghdadLocations = ['التاجيات', 'الشعب', 'الكاظمية', 'الحسينية', 'الرستمية', 'الغزالية'].map(l => ({ value: l, label: l }));
+  // Backend expects values: private, truck, taxi
+  const categoryOptions = [
+    { value: 'private', label: 'خصوصي' },
+    { value: 'truck', label: 'حمل' },
+    { value: 'taxi', label: 'أجرة' }
+  ];
   useEffect(() => {
     const fetchVehicle = async () => {
       if (isEditMode && id && !isNaN(Number(id))) {
@@ -71,9 +97,16 @@ const VehicleForm: React.FC = () => {
     setFormData(prev => ({ ...prev, remaining_amount: (amount - paid).toString() }));
   }, [formData.amount, formData.paid_amount]);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
-    const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>
+  ) => {    const { name, value } = e.target;
+  setFormData(prev => {
+    const updated = { ...prev, [name]: value };
+    if (name === 'province' && value !== 'بغداد') {
+      updated.work_location = '';
+    }
+    return updated;
+  });
     if (errors[name]) setErrors(prev => ({ ...prev, [name]: '' }));
     if (submitError) setSubmitError(null);
   };
@@ -148,15 +181,60 @@ const VehicleForm: React.FC = () => {
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <GlassInput label="رقم المركبة" name="vehicle_number" value={formData.vehicle_number} onChange={handleChange} error={errors.vehicle_number} fullWidth />
-                <GlassSelect label="حرف المركبة" name="vehicle_letter" value={formData.vehicle_letter} onChange={handleChange} options={letterOptions} error={errors.vehicle_letter} fullWidth />
-                <GlassSelect label="المحافظة" name="province" value={formData.province} onChange={handleChange} options={provinceOptions} error={errors.province} fullWidth />
-                <GlassSelect label="الصنف" name="category" value={formData.category} onChange={handleChange} options={categoryOptions} error={errors.category} fullWidth />
-                <GlassInput label="رقم الشاسي" name="chassis_number" value={formData.chassis_number} onChange={handleChange} error={errors.chassis_number} fullWidth />
+                <GlassSelect
+                  label="حرف المركبة"
+                  name="vehicle_letter"
+                  value={formData.vehicle_letter}
+                  onChange={handleChange}
+                  options={letterOptions}
+                  error={errors.vehicle_letter}
+                  placeholder="اختر الحرف"
+                  fullWidth
+                />
+                <GlassSelect
+                  label="المحافظة"
+                  name="province"
+                  value={formData.province}
+                  onChange={handleChange}
+                  options={provinceOptions}
+                  error={errors.province}
+                  placeholder="اختر المحافظة"
+                  fullWidth
+                />
+                <GlassSelect
+                  label="الصنف"
+                  name="category"
+                  value={formData.category}
+                  onChange={handleChange}
+                  options={categoryOptions}
+                  error={errors.category}
+                  placeholder="اختر الصنف"
+                  fullWidth
+                />
+                <GlassInput label="رقم الشاصي" name="chassis_number" value={formData.chassis_number} onChange={handleChange} error={errors.chassis_number} fullWidth />
                 <GlassInput label="اسم المستورد" name="importer_name" value={formData.importer_name} onChange={handleChange} error={errors.importer_name} fullWidth />
                 <GlassInput label="هاتف المستورد" name="importer_phone" value={formData.importer_phone} onChange={handleChange} error={errors.importer_phone} fullWidth />
                 <GlassInput label="اسم المشتري" name="buyer_name" value={formData.buyer_name} onChange={handleChange} error={errors.buyer_name} fullWidth />
                 <GlassInput label="هاتف المشتري" name="buyer_phone" value={formData.buyer_phone} onChange={handleChange} error={errors.buyer_phone} fullWidth />
-                <GlassInput label="موقع العمل" name="work_location" value={formData.work_location} onChange={handleChange} fullWidth />
+                {formData.province === 'بغداد' ? (
+                  <GlassSelect
+                    label="موقع العمل"
+                    name="work_location"
+                    value={formData.work_location}
+                    onChange={handleChange}
+                    options={baghdadLocations}
+                    placeholder="اختر الموقع"
+                    fullWidth
+                  />
+                ) : (
+                  <GlassInput
+                    label="موقع العمل"
+                    name="work_location"
+                    value={formData.work_location}
+                    onChange={handleChange}
+                    fullWidth
+                  />
+                )}
                 <GlassInput label="المبلغ" name="amount" value={formData.amount} onChange={handleChange} error={errors.amount} fullWidth />
                 <GlassInput label="المدفوع" name="paid_amount" value={formData.paid_amount} onChange={handleChange} error={errors.paid_amount} fullWidth />
                 <GlassInput label="المتبقي" name="remaining_amount" value={formData.remaining_amount} onChange={() => {}} readOnly fullWidth />
@@ -187,8 +265,7 @@ const VehicleForm: React.FC = () => {
         </GlassCard>
       </motion.div>
 
-      {/* ✅ الشعار أسفل الصفحة */}
-      <Footer />
+      
     </DashboardLayout>
   );
 };

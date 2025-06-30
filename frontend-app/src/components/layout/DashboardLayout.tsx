@@ -3,6 +3,14 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { cn } from "@/lib/utils";
+import {
+  LayoutDashboard,
+  CarFront,
+  PlusCircle,
+  FileText,
+  Settings,
+  LogOut,
+} from "lucide-react";
 import Footer from "../ui/Footer";
 
 interface DashboardLayoutProps {
@@ -10,15 +18,19 @@ interface DashboardLayoutProps {
   title: string;
 }
 
-const sidebarItems = [
-  { id: "dashboard", label: "لوحة التحكم", icon: "📊", href: "/dashboard" },
-  { id: "vehicles", label: "المركبات", icon: "🚗", href: "/vehicles/" },
-  { id: "add-vehicle", label: "إضافة مركبة", icon: "➕", href: "/vehicles/new" },
-
-  //{ id: "add-vehicle", label: "إضافة مركبة", icon: "➕", href: "/vehicle/add" },
-  { id: "reports", label: "التقارير", icon: "📝", href: "/reports" },
-  { id: "settings", label: "الإعدادات", icon: "⚙️", href: "/settings" },
-  { id: "logout", label: "تسجيل الخروج", icon: "🚪", href: "/logout" },
+interface SidebarItem {
+  id: string;
+  label: string;
+  icon: React.ReactNode;
+  href: string;
+}
+const sidebarItems: SidebarItem[] = [
+  { id: "dashboard", label: "لوحة التحكم", icon: <LayoutDashboard size={20} />, href: "/dashboard" },
+  { id: "vehicles", label: "المركبات", icon: <CarFront size={20} />, href: "/vehicles/" },
+  { id: "add-vehicle", label: "إضافة مركبة", icon: <PlusCircle size={20} />, href: "/vehicles/new" },
+  { id: "reports", label: "التقارير", icon: <FileText size={20} />, href: "/reports" },
+  { id: "settings", label: "الإعدادات", icon: <Settings size={20} />, href: "/settings" },
+  { id: "logout", label: "تسجيل الخروج", icon: <LogOut size={20} />, href: "/logout" },
 ];
 
 const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children, title }) => {
@@ -26,11 +38,13 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children, title }) =>
   const currentPath = window.location.pathname;
 
   return (
-    <div dir="rtl" className="min-h-screen flex bg-gradient-to-bl from-blue-100 to-cyan-100 font-[Tajawal] text-right">
+          <div dir="rtl" className="min-h-screen flex bg-gradient-to-br from-sky-200 via-sky-100 to-sky-50 font-[Tajawal] text-right">
+
       {/* الشريط الجانبي */}
       <aside className="w-64 bg-white text-gray-800 p-4 shadow-xl hidden md:block">
         <div className="text-xl font-bold mb-8 flex items-center gap-2 text-cyan-700">
-          🚗 <span>نظام البعاج</span>
+
+        <CarFront className="w-6 h-6" /> <span>نظام البعاج</span>
         </div>
         <nav className="space-y-1">
           {sidebarItems.map((item) => (

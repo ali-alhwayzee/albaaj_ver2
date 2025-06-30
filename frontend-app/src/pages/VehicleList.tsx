@@ -40,12 +40,10 @@ const VehicleList: React.FC = () => {
   { value: 'دهوك', label: 'دهوك' },
   { value: 'السليمانية', label: 'السليمانية' },
   { value: 'القادسية', label: 'القادسية' },];
-  const categoryOptions = [{ value: 'خاص', label: 'خاص' },
-  { value: 'عام', label: 'عام' },
-  { value: 'حكومي', label: 'حكومي' },
-  { value: 'تجاري', label: 'تجاري' },
-  { value: 'أجرة', label: 'أجرة' },
-  { value: 'حمل', label: 'حمل' }];
+  const categoryOptions = [
+    { value: 'private', label: 'خصوصي' },
+    { value: 'truck', label: 'حمل' },
+    { value: 'taxi', label: 'أجرة' }];
 
   const columns = [
     { accessor: 'vehicle_number', header: 'رقم المركبة' },
@@ -96,9 +94,15 @@ const VehicleList: React.FC = () => {
   });
 
   const paginatedVehicles = filteredVehicles.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
+  const categoryLabels: Record<string, string> = {
+    private: 'خصوصي',
+    truck: 'حمل',
+    taxi: 'أجرة',
+  };
 
   const formattedVehicles = paginatedVehicles.map(v => ({
     ...v,
+    category: categoryLabels[v.category] || v.category,
     amount: formatCurrency(v.amount),
     remaining_amount: formatCurrency(v.remaining_amount),
   }));
@@ -115,8 +119,8 @@ const VehicleList: React.FC = () => {
   return (
     <DashboardLayout title="قائمة المركبات">
       <div className="mb-6">
-        <h1 className="text-3xl font-bold text-white">قائمة المركبات</h1>
-        <p className="text-white/70">عرض وإدارة جميع المركبات</p>
+      <h1 className="text-3xl font-bold text-cyan-900">قائمة المركبات</h1>
+        <p className="text-gray-600">عرض وإدارة جميع المركبات</p>
       </div>
 
       <GlassCard className="p-6 mb-6">
@@ -128,7 +132,15 @@ const VehicleList: React.FC = () => {
             <GlassSelect label="المحافظة" name="province" value={filterProvince} onChange={(e) => setFilterProvince(e.target.value)} options={provinceOptions} fullWidth />
           </div>
           <div className="w-full md:w-48">
-            <GlassSelect label="الصنف" name="category" value={filterCategory} onChange={(e) => setFilterCategory(e.target.value)} options={categoryOptions} fullWidth />
+          <GlassSelect
+              label="الصنف"
+              name="category"
+              value={filterCategory}
+              onChange={(e) => setFilterCategory(e.target.value)}
+              options={categoryOptions}
+              placeholder="اختر الصنف"
+              fullWidth
+            />
           </div>
           <GlassButton variant="primary" onClick={() => navigate('/vehicles/new')}>+ إضافة مركبة</GlassButton>
         </div>

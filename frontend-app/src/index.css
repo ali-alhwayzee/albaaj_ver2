@@ -86,4 +86,17 @@
   }
   
 }
-
+@media print {
+  body {
+    background: white !important;
+    color: black !important;
+  }
+  .glass-card, .glass-table, .glass-button {
+    background: white !important;
+    box-shadow: none !important;
+    color: black !important;
+  }
+  .no-print {
+    display: none !important;
+  }
+}
